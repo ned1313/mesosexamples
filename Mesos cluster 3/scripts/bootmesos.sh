@@ -35,10 +35,10 @@ echo "*                                                                    *"
 echo "**********************************************************************" 
 echo
 
-apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E56151BF
 DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
 CODENAME=$(lsb_release -cs)
-echo "deb http://repos.mesosphere.io/${DISTRO} ${CODENAME} main" | sudo tee /etc/apt/sources.list.d/mesosphere.list
+echo "deb http://repos.mesosphere.com/${DISTRO} ${CODENAME} main" | sudo tee /etc/apt/sources.list.d/mesosphere.list
 
 echo   
 echo "**********************************************************************"
@@ -50,7 +50,7 @@ echo
 
 apt-get -y update
 apt-get install -y vim
-apt-get install -y mesosphere 
+apt-get install -y mesos marathon
 
 echo   
 echo "**********************************************************************"
@@ -119,13 +119,13 @@ echo "*                                                                    *"
 echo "**********************************************************************" 
 echo
 
-stop mesos-slave
+service stop mesos-slave
 echo manual | tee /etc/init/mesos-slave.override
 
-restart zookeeper
-start mesos-master
-start marathon
-start chronos
+service restart zookeeper
+service start mesos-master
+service start marathon
+service start chronos
 
 
 ifconfig

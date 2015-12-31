@@ -29,10 +29,20 @@ echo "*                                                                    *"
 echo "**********************************************************************" 
 echo
 
-apt-key adv --keyserver keyserver.ubuntu.com --recv E56151BF
+apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv E56151BF
 DISTRO=$(lsb_release -is | tr '[:upper:]' '[:lower:]')
 CODENAME=$(lsb_release -cs)
-echo "deb http://repos.mesosphere.io/${DISTRO} ${CODENAME} main" | sudo tee /etc/apt/sources.list.d/mesosphere.list
+echo "deb http://repos.mesosphere.com/${DISTRO} ${CODENAME} main" | sudo tee /etc/apt/sources.list.d/mesosphere.list
+
+echo   
+echo "**********************************************************************"
+echo "*                                                                    *"
+echo "* Add the Docker Repositories to your Hosts                      *"  
+echo "*                                                                    *"  
+echo "**********************************************************************" 
+echo
+apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+echo "deb https://apt.dockerproject.org/repo ${DISTRO}-${CODENAME} main" | sudo tee /etc/apt/sources.list.d/docker.list
 
 echo   
 echo "**********************************************************************"
@@ -44,7 +54,7 @@ echo
 
 apt-get -y update
 apt-get -y vim
-apt-get install -y mesos 
+apt-get -y install mesos 
 
 echo   
 echo "**********************************************************************"
@@ -64,7 +74,7 @@ echo "*                                                                    *"
 echo "**********************************************************************" 
 echo
 
-stop zookeeper
+service stop zookeeper
 echo manual | tee /etc/init/zookeeper.override
 
 echo   
@@ -76,7 +86,7 @@ echo "**********************************************************************"
 echo
 
 echo manual | tee /etc/init/mesos-master.override
-stop mesos-master
+service stop mesos-master
 
 echo   
 echo "**********************************************************************"
@@ -104,10 +114,9 @@ echo "*                                                                    *"
 echo "**********************************************************************" 
 echo
 
-apt-get install -y linux-image-generic-lts-trusty
-apt-get install -y curl
-curl -sSL https://get.docker.com/ | sh
-usermod -aG docker ubuntu
+apt-get -y install linux-image-extra-$(uname -r)
+apt-get -y install docker-engine
+usermod -aG docker vagrant
 docker -v
 
 echo   
@@ -118,7 +127,7 @@ echo "*                                                                    *"
 echo "**********************************************************************" 
 echo
 
-start mesos-slave
+service start mesos-slave
 
 ifconfig
 exit 0
