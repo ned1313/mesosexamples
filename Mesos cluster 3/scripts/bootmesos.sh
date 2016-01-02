@@ -119,13 +119,13 @@ echo "*                                                                    *"
 echo "**********************************************************************" 
 echo
 
-service stop mesos-slave
+service mesos-slave stop
 echo manual | tee /etc/init/mesos-slave.override
 
-service restart zookeeper
-service start mesos-master
-service start marathon
-service start chronos
+service zookeeper restart
+service mesos-master start
+service marathon start
+#service chronos start
 
 
 ifconfig

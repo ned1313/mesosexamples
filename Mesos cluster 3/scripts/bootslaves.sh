@@ -74,7 +74,7 @@ echo "*                                                                    *"
 echo "**********************************************************************" 
 echo
 
-service stop zookeeper
+service zookeeper stop
 echo manual | tee /etc/init/zookeeper.override
 
 echo   
@@ -86,7 +86,7 @@ echo "**********************************************************************"
 echo
 
 echo manual | tee /etc/init/mesos-master.override
-service stop mesos-master
+service mesos-master stop
 
 echo   
 echo "**********************************************************************"
@@ -127,7 +127,7 @@ echo "*                                                                    *"
 echo "**********************************************************************" 
 echo
 
-service start mesos-slave
+service mesos-slave start
 
 ifconfig
 exit 0
